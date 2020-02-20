@@ -12,7 +12,7 @@ class _BotStartState extends State<BotStart> {
   @override
   Widget build(BuildContext context) {
     var inputBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10.0),
+      borderRadius: BorderRadius.circular(30.0),
       gapPadding: 1.0,
       borderSide: BorderSide(
         width: 0,
@@ -21,11 +21,12 @@ class _BotStartState extends State<BotStart> {
       ),
     );
     List<String> tips = [
-      '2 Moorch Bundle Offers',
-      "Bossu Offers",
-      "Recharge Info",
+      'I need help',
+      "Skin Deseases",
+      "Hey",
       "Enquiry",
     ];
+    var theme = Theme.of(context);
     return Column(
       children: <Widget>[
         Expanded(
@@ -37,6 +38,7 @@ class _BotStartState extends State<BotStart> {
               style: TextStyle(
                 // fontWeight: FontWeight.bold,
                 fontSize: 17,
+                color: Colors.black45,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,19 +57,31 @@ class _BotStartState extends State<BotStart> {
                     padding: EdgeInsets.symmetric(
                       vertical: 20,
                     ),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: inputBorder,
-                        enabledBorder: inputBorder,
-                        focusedBorder: inputBorder,
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 10.0),
-                        hintText: "Ask me a question",
-                        hintStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 10,
+                            color: Colors.black12,
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: inputBorder,
+                          enabledBorder: inputBorder,
+                          focusedBorder: inputBorder,
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 10.0),
+                          hintText: "Ask me a question",
+                          hintStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            // color: Colors.white60,
+                          ),
                         ),
                       ),
                     ),
@@ -90,16 +104,21 @@ class _BotStartState extends State<BotStart> {
                               vertical: 15.0, horizontal: 15.0),
                           margin: EdgeInsets.only(bottom: 12),
                           decoration: BoxDecoration(
-                            color: Colors.black12,
+                            color: theme.primaryColor,
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text(tips[index]),
+                              Text(
+                                tips[index],
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                ),
+                              ),
                               Icon(
                                 Icons.chevron_right,
-                                color: Colors.white,
+                                color: Colors.white30,
                               ),
                             ],
                           ),
@@ -115,7 +134,7 @@ class _BotStartState extends State<BotStart> {
                         Text("see more"),
                         Icon(
                           Icons.arrow_downward,
-                          color: Colors.white,
+                          color: Colors.black38,
                         ),
                       ],
                     ),
@@ -129,10 +148,14 @@ class _BotStartState extends State<BotStart> {
           padding: EdgeInsets.symmetric(vertical: 15.0),
           margin: EdgeInsets.symmetric(vertical: 10.0),
           width: MediaQuery.of(context).size.width * 0.7,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10.0),
-          ),
+          decoration: BoxDecoration(color: Colors.white,
+              // borderRadius: BorderRadius.circular(10.0),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 10,
+                  color: Colors.black12,
+                ),
+              ]),
           child: Text(
             "Conversation History",
             textAlign: TextAlign.center,

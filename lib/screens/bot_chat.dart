@@ -20,50 +20,90 @@ class _BotChatState extends State<BotChat> {
   @override
   void initState() {
     super.initState();
-    Provider.of<Bot>(context, listen: false).receives.listen((_data) {
-      setState(() {
+    Future.microtask(
+      () => Provider.of<Bot>(context, listen: false).receives.listen((_data) {
+        // setState(() {
         _conversation.insert(0, _data);
-      });
-    });
+        // });
+      }),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     bot = Provider.of<Bot>(context);
     var kBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(0),
+      borderSide: BorderSide(
+        color: Colors.transparent,
+        style: BorderStyle.none,
+        width: 0.0,
+      ),
     );
     return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: Column(
         children: <Widget>[
-          Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              physics: BouncingScrollPhysics(),
-              reverse: true,
-              padding: EdgeInsets.symmetric(horizontal: 10.0),
-              itemCount: _conversation.length,
-              itemBuilder: (context, index) {
-                return ChatCard(
-                  input: _conversation.elementAt(index),
-                );
-              },
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 6,
+                  color: Colors.black12,
+                ),
+              ],
+            ),
+            child: Row(
+              children: <Widget>[
+                IconButton(
+                  color: Colors.white,
+                  icon: Icon(Icons.arrow_back_ios),
+                  onPressed: () {
+                    widget.tabController.animateTo(0);
+                  },
+                ),
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    onSubmitted: _query,
+                    decoration: InputDecoration(
+                      hintText: "write a message",
+                      border: kBorder,
+                      enabledBorder: kBorder,
+                      focusedBorder: kBorder,
+                      filled: true,
+                      fillColor: Colors.grey.shade100,
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
-          Container(
-            padding: EdgeInsets.all(10),
-            color: Colors.grey.shade800,
-            child: TextField(
-              controller: _controller,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                border: kBorder,
-                hintText: "Write a message",
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              ),
-              onSubmitted: _query,
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: StreamBuilder<Object>(
+                  stream: Provider.of<Bot>(context, listen: false).receives,
+                  builder: (context, snapshot) {
+                    return ListView.builder(
+                      controller: _scrollController,
+                      physics: BouncingScrollPhysics(),
+                      // reverse: true,
+                      padding: EdgeInsets.only(
+                        right: 10.0,
+                        left: 10.0,
+                        top: 10.0,
+                      ),
+                      itemCount: _conversation.length,
+                      itemBuilder: (context, index) {
+                        return ChatCard(
+                          input: _conversation.elementAt(index),
+                        );
+                      },
+                    );
+                  }),
             ),
           ),
         ],
@@ -93,9 +133,11 @@ class ChatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    var media = MediaQuery.of(context);
+    double width = media.size.width;
     var theme = Theme.of(context);
     return Container(
+      // padding: EdgeInsets.only(bottom: media.viewInsets.bottom),
       child: Row(
         mainAxisAlignment:
             input.isAnswer ? MainAxisAlignment.start : MainAxisAlignment.end,
@@ -107,6 +149,12 @@ class ChatCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: input.isAnswer ? Colors.white : Colors.black26,
               borderRadius: BorderRadius.circular(10.0),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 7,
+                  color: Colors.black.withOpacity(0.10),
+                ),
+              ],
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -141,17 +189,18 @@ class ChatCard extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 child: Container(
-                                    padding: EdgeInsets.all(14),
-                                    decoration: BoxDecoration(
-                                      color: Colors.black12,
-                                      borderRadius: BorderRadius.circular(10.0),
+                                  padding: EdgeInsets.all(14),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black12,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Text(
+                                    _helps.elementAt(i),
+                                    style: TextStyle(
+                                      color: Colors.white,
                                     ),
-                                    child: Text(
-                                      _helps.elementAt(i),
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    )),
+                                  ),
+                                ),
                               ),
                             );
                           },
